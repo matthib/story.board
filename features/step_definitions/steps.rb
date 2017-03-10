@@ -719,3 +719,31 @@ When(/^I update the text component$/) do
   click_on 'Update'
   expect(page).to have_text('Text component was successfully updated.')
 end
+
+Given(/^I am a member of the service team$/) do
+  # nothing but documentation
+end
+
+Given(/^I take care of a report called "([^"]*)"$/) do |name|
+  @report = create(:report, name: name)
+end
+
+When(/^I edit the report$/) do
+  visit edit_report_path(@report)
+end
+
+When(/^enter a new channel called "([^"]*)" and click on "([^"]*)"$/) do |name, button|
+  fill_in 'new_channel', with: name
+  click_on button
+end
+
+Then(/^there is a new channel in the database$/) do
+  expect(Channel.count).to eq 1
+end
+
+Then(/^I can reach an endpoint for my channel at '\/channels\/:id'$/) do
+  channel = Channel.first
+  get "/channels/#{channel.id}"
+  expect(response).to have_http_status(:ok)
+end
+
